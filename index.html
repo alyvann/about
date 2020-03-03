@@ -1,14 +1,110 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Alyssa Vann</title>
+	<title>Alyssa Vann</title>
+
+	<script src="https://kit.fontawesome.com/50d2292be5.js" crossorigin="anonymous"></script>
 </head>
+
+<style>
+	body {
+		font-family: 'Andale Mono';
+	}
+
+	.card-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.card {
+		width: 20%;
+		border-style: solid;
+		border-width: thin;
+		margin: 1%;
+		padding: 1%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.date {
+		font-size: x-small;
+	}
+
+	.title {
+		font-weight: bold;
+	}
+
+	a {
+		text-decoration: none;
+		color: black;
+	}
+
+	h3 {
+		margin-left: 1%;
+	}
+</style>
+
 <body>
 
-<div style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: center;">
+<!-- <div style="display: flex; flex: 1 1 0%; flex-direction: column; align-items: center;">
 	<p>resum&eacute;</p>
 	<embed src="resume.pdf" width="850px" height="1100px"/>
-</div>
+</div> -->
+
+	<div class="card-container">
+		<div class="card">
+			<span class="date">2018-05</span>
+			<br />
+			<span class="title">Telecommuting</span>
+		</div>
+
+		<div class="card">
+			<span class="date">2018-04</span>
+			<br />
+			<span class="title">Stanford Struggles</span>
+		</div>
+
+		<div class="card">
+			<span class="date">2018-03</span>
+			<br />
+			<span class="title">Personal Geography</span>
+		</div>
+
+		<div class="card">
+			<span class="date">2017-12</span>
+			<br />
+			<span class="title">
+				<a 
+					href="https://storytelling.stanford.edu/2018/01/24/no-hay-pelo-malo/"
+					target="_blank" rel="noopener noreferrer"
+				>
+					No Hay Pelo Malo 
+					<i class="fas fa-external-link-alt"></i>
+				</a>
+			</span>
+		</div>
+
+		<div class="card">
+			<span class="date">2017-04</span>
+			<br />
+			<span class="title">
+				<a 
+					href="http://sameboats.org"
+					target="_blank" rel="noopener noreferrer"
+				>
+					In the Same Boats
+					<i class="fas fa-external-link-alt"></i>
+				</a>
+			</span>
+		</div>
+
+		<div class="card">
+			<span class="date">2015-12</span>
+			<br />
+			<span class="title">Virtual Reality Poetry</span>
+		</div>
+	</div>
 
 </body>
 </html>
