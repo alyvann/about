@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Alyssa Vann - Telecommuting</title>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+    </head>
+    <style>
+        body{
+            font-family: 'Andale Mono';
+            /* font-family: 'PT Sans', sans-serif; */
+        }
+
+        .container {
+            margin-top: 5%;
+            text-align: center;
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 3px;
+        }
+
+        .telework-bar {
+            fill: #143c3e;
+            /*opacity: 0.8;*/
+        }
+
+        .co2-bar {
+            fill: #f38156;
+            /*opacity: 0.8;*/
+        }
+
+
+        .state-labels text{
+            fill: #969494;
+        }
+
+        #energy-use, #state-co2, #telework-industry {
+            text-align: center;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+       }
+    </style>
+    <body>
+        <div class="container">
+            <h1>Changes in Telecommuting and C02 Emissions By State</h1>
+            <div id="state-co2"></div>
+        </div>
+        
+        <hr />
+
+        <div class="container">
+            <h1>Estimated Energy Usage Commuting versus Telecommuting</h1>
+            <div id="energy-use"></div>
+        </div>
+
+        <!-- <div id="telework-industry"></div> -->
+
+        <!-- add percent change from 2005 to 2015 to hover-->
+        <!-- TELEWORK v CO2 BY STATE BAR CHART -->
+        <script>
+            var data = [
+                {
+                    "State": "Wyoming",
+                    "Telework": -0.2676598212,
+                    "CO2": 0.02369668246
+                },
+                {
+                    "State": "North Dakota",
+                    "Telework": -0.1705353004,
+                    "CO2": 0.08969465649
+                },
+                {
+                    "State": "Nebraska",
+                    "Telework": -0.1190391999,
+                    "CO2": 0.1578947368
+                },
+                {
+                    "State": "Iowa",
+                    "Telework": -0.05746033203,
+                    "CO2": -0.03684879288
+                },
+                {
+                    "State": "South Dakota",
+                    "Telework": -0.04997337359,
+                    "CO2": 0.06015037594
+                },
+                {
+                    "State": "New Mexico",
+                    "Telework": 0.007553778039,
+                    "CO2": -0.1534569983
+                },
+                {
+                    "State": "Hawaii",
+                    "Telework": 0.01352014499,
+                    "CO2": -0.1913043478
+                },
+                {
+                    "State": "Montana",
+                    "Telework": 0.0165080191,
+                    "CO2": -0.09295774648
+                },
+                {
+                    "State": "Wisconsin",
+                    "Telework": 0.06227351655,
+                    "CO2": -0.1018935978
+                },
+                {
+                    "State": "Kansas",
+                    "Telework": 0.06244373259,
+                    "CO2": -0.1248266297
+                },
+                {
+                    "State": "Alaska",
+                    "Telework": 0.07356946305,
+                    "CO2": -0.2479166667
+                },
+                {
+                    "State": "Vermont",
+                    "Telework": 0.09860373241,
+                    "CO2": -0.1029411765
+                },
+                {
+                    "State": "West Virginia",
+                    "Telework": 0.1101273299,
+                    "CO2": -0.188712522
+                },
+                {
+                    "State": "Kentucky",
+                    "Telework": 0.1187214524,
+                    "CO2": -0.1534460338
+                },
+                {
+                    "State": "New York",
+                    "Telework": 0.1329715034,
+                    "CO2": -0.20463138
+                },
+                {
+                    "State": "Mississippi",
+                    "Telework": 0.1407746347,
+                    "CO2": 0.01401869159
+                },
+                {
+                    "State": "Oklahoma",
+                    "Telework": 0.1461581102,
+                    "CO2": -0.05322128852
+                },
+                {
+                    "State": "Michigan",
+                    "Telework": 0.1546318522,
+                    "CO2": -0.1469045121
+                },
+                {
+                    "State": "Indiana",
+                    "Telework": 0.1697041972,
+                    "CO2": -0.2056587838
+                },
+                {
+                    "State": "Maryland",
+                    "Telework": 0.1748934027,
+                    "CO2": -0.2886227545
+                },
+                {
+                    "State": "Arkansas",
+                    "Telework": 0.1802490612,
+                    "CO2": -0.01827242525
+                },
+                {
+                    "State": "Utah",
+                    "Telework": 0.1809616928,
+                    "CO2": -0.05812220566
+                },
+                {
+                    "State": "Minnesota",
+                    "Telework": 0.1812210085,
+                    "CO2": -0.1393523062
+                },
+                {
+                    "State": "Rhode Island",
+                    "Telework": 0.1837916515,
+                    "CO2": -0.02678571429
+                },
+                {
+                    "State": "Colorado",
+                    "Telework": 0.1853499808,
+                    "CO2": -0.0534591195
+                },
+                {
+                    "State": "Louisiana",
+                    "Telework": 0.2319454362,
+                    "CO2": 0.04003813155
+                },
+                {
+                    "State": "Washington",
+                    "Telework": 0.2330518779,
+                    "CO2": -0.03566878981
+                },
+                {
+                    "State": "Oregon",
+                    "Telework": 0.2346744747,
+                    "CO2": -0.07542579075
+                },
+                {
+                    "State": "Ohio",
+                    "Telework": 0.241189308,
+                    "CO2": -0.2105263158
+                },
+                {
+                    "State": "Nevada",
+                    "Telework": 0.2432289488,
+                    "CO2": -0.2945891784
+                },
+                {
+                    "State": "Idaho",
+                    "Telework": 0.2547018497,
+                    "CO2": 0.1265822785
+                },
+                {
+                    "State": "Maine",
+                    "Telework": 0.2583326419,
+                    "CO2": -0.2727272727
+                },
+                {
+                    "State": "California",
+                    "Telework": 0.2911436315,
+                    "CO2": -0.06627279733
+                },
+                {
+                    "State": "Illinois",
+                    "Telework": 0.3088556412,
+                    "CO2": -0.1001642036
+                },
+                {
+                    "State": "Texas",
+                    "Telework": 0.3108004947,
+                    "CO2": 0.02221496243
+                },
+                {
+                    "State": "Delaware",
+                    "Telework": 0.322626973,
+                    "CO2": -0.2298850575
+                },
+                {
+                    "State": "Missouri",
+                    "Telework": 0.3292252277,
+                    "CO2": -0.1402651779
+                },
+                {
+                    "State": "Virginia",
+                    "Telework": 0.3358224552,
+                    "CO2": -0.2027863777
+                },
+                {
+                    "State": "Pennsylvania",
+                    "Telework": 0.3540172662,
+                    "CO2": -0.1707577375
+                },
+                {
+                    "State": "Tennessee",
+                    "Telework": 0.3642229152,
+                    "CO2": -0.2160251375
+                },
+                {
+                    "State": "Arizona",
+                    "Telework": 0.3663247546,
+                    "CO2": -0.05997931748
+                },
+                {
+                    "State": "New Jersey",
+                    "Telework": 0.3785329614,
+                    "CO2": -0.1431852986
+                },
+                {
+                    "State": "Massachusetts",
+                    "Telework": 0.4038744793,
+                    "CO2": -0.2236686391
+                },
+                {
+                    "State": "Alabama",
+                    "Telework": 0.4220769406,
+                    "CO2": -0.163991626
+                },
+                {
+                    "State": "Georgia",
+                    "Telework": 0.4287648966,
+                    "CO2": -0.2589189189
+                },
+                {
+                    "State": "Connecticut",
+                    "Telework": 0.4829084565,
+                    "CO2": -0.1723356009
+                },
+                {
+                    "State": "Florida",
+                    "Telework": 0.5354059558,
+                    "CO2": -0.1120491174
+                },
+                {
+                    "State": "District of Columbia",
+                    "Telework": 0.544939502,
+                    "CO2": -0.2307692308
+                },
+                {
+                    "State": "New Hampshire",
+                    "Telework": 0.5517370109,
+                    "CO2": -0.2910798122
+                },
+                {
+                    "State": "South Carolina",
+                    "Telework": 0.5620713018,
+                    "CO2": -0.164960182
+                },
+                {
+                    "State": "North Carolina",
+                    "Telework": 0.5851713736,
+                    "CO2": -0.2181818182
+                }
+            ];
+
+            var margin = {top: 20, right: 20, bottom: 30, left: 40},
+                width = 1200 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+
+            // var svg = d3.select('body')
+            var svg = d3.select('#state-co2')
+                        .append('svg')
+                        .attr('width', width + margin.left + margin.right)
+                        .attr('height', height + margin.top + margin.bottom);
+            
+            var g = svg.append("g")
+                        .attr("transform", 
+                                "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleBand()
+                        .domain(data.map(function (d) { return d["State"]; }))
+                        .rangeRound([0, width])
+                        .padding(0.1);
+            
+            var y = d3.scaleLinear()
+                        .domain(d3.extent(data, function (d) { return d["Telework"]; })).nice()
+                        .range([height, 0]);
+
+            var xAxis = d3.axisBottom(x);
+            var yAxis = d3.axisLeft(y);
+
+            var keys = ["Telecommuting", "Carbon Dioxide Emissions"];
+            var colors = ['#143c3e', '#f38156'];
+            var z = d3.scaleOrdinal()
+                .domain(keys)
+                .range(colors);
+
+            g.selectAll('.telework-bar')
+                .data(data)
+              .enter().append('rect')
+                .attr('class', 'telework-bar')
+                .attr('x', function (d) { return x(d["State"]); })
+                .attr('y', function (d) { return y(Math.max(0, d["Telework"])); })
+                .attr('height', function (d) { return Math.abs(y(d["Telework"]) - y(0)); })  
+                .attr('width', x.bandwidth())
+                
+                .on("mouseover", function() { state_tooltip.style("display", null); })
+                .on("mouseout", function() { state_tooltip.style("display", "none"); })
+                .on("mousemove", function(d) {
+                    var xPosition = d3.mouse(this)[0] + 10;
+                    var yPosition = d3.mouse(this)[1] + 10;
+                    state_tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                    state_tooltip.select("text").text(d["State"]);
+                });
+
+            g.selectAll('.co2-bar')
+                .data(data)
+              .enter().append('rect')
+                .attr('class', 'co2-bar')
+                .attr('x', function (d) { return x(d["State"]); })
+                .attr('y', function (d) { return y(Math.max(0, d["CO2"])); })
+                .attr('height', function (d) { return Math.abs(y(d["CO2"]) - y(0)); })
+                .attr('width', x.bandwidth())
+
+                .on("mouseover", function() { state_tooltip.style("display", null); })
+                .on("mouseout", function() { state_tooltip.style("display", "none"); })
+                .on("mousemove", function(d) {
+                    var xPosition = d3.mouse(this)[0] + 10;
+                    var yPosition = d3.mouse(this)[1] + 10;
+                    state_tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                    state_tooltip.select("text").text(d["State"]);
+                });
+
+            g.append("g")
+              .attr("class", "axis")
+              .call(yAxis)
+            .append("text")
+              .attr("x", 2)
+              .attr("y", y(y.ticks().pop()) + 0.5)
+              .attr("dy", "0.32em")
+              .attr("fill", "#000")
+              .attr("font-weight", "bold")
+              .attr("text-anchor", "start")
+              .text("Percent Change from 2005 to 2015");  
+
+            g.append("g")
+                  .attr("class", "axis")
+                  .attr("class", 'state-labels')
+                  .attr("transform", "translate(0," + 300 + ")")
+                  .call(d3.axisBottom(x))
+                  .selectAll("text")    
+                    .style("text-anchor", "start")
+                    .attr("dx", "0.6em")
+                    .attr("dy", "-.5em")
+                    .attr("transform", "rotate(-90)");
+
+            var legend = g.append("g")
+                  .attr("font-family", "sans-serif")
+                  .attr("font-size", 10)
+                  .attr("text-anchor", "end")
+                .selectAll("g")
+                .data(keys.slice().reverse())
+                .enter().append("g")
+                  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                  .attr("x", 10)
+                  .attr("y", margin.top + 10)
+                  .attr("width", 19)
+                  .attr("height", 19)
+                  .attr("fill", z);
+
+            legend.append("text")
+                  .attr("x", 35)
+                  .attr("y", margin.top + 20)
+                  .attr("text-anchor", "start")
+                  .attr("dy", "0.32em")
+                  .text(function(d) { return d; });
+
+            var state_tooltip = g.append("g")
+                .attr("class", "tooltip")
+                .style("display", "none");
+              
+            state_tooltip.append("rect")
+                .attr("width", 100)
+                .attr("height", 20)
+                .attr("fill", "white")
+                .style("opacity", 0.5);
+
+            state_tooltip.append("text")
+                .attr("class", "text-back")
+                .attr("x", 5)
+                .attr("dy", "1.2em")
+                .style("text-anchor", "start")
+                .attr("font-size", "12px")
+                .attr("font-weight", "bold");
+        </script>
+
+
+        <!-- TELEWORK ENERGY USE -->
+        <script>
+            var data = [
+                {
+                    "Duration": "No Telecommuting",
+                    "Transportation": 46,
+                    "Office Electrical Equipment": 1.8,
+                    "Home Electrical Equipment": 0.31,
+                    "Office Lighting": 1.8,
+                    "Home Lighting": 0.05,
+                    "Office Heating & Cooling": 6.4,
+                    "Home Heating & Cooling": 0,
+                    "Total": 62.76
+                },
+                {
+                    "Duration": "1 day per week",
+                    "Transportation": 38,
+                    "Office Electrical Equipment": 1.6,
+                    "Home Electrical Equipment": 1.8,
+                    "Office Lighting": 1.8,
+                    "Home Lighting": 0.18,
+                    "Office Heating & Cooling": 6.4,
+                    "Home Heating & Cooling": 3.45,
+                    "Total": 59.63
+                },
+                {
+                    "Duration": "3 day per week",
+                    "Transportation": 22,
+                    "Office Electrical Equipment": 1.1,
+                    "Home Electrical Equipment": 7.1,
+                    "Office Lighting": 0.8,
+                    "Home Lighting": 0.55,
+                    "Office Heating & Cooling": 3.0,
+                    "Home Heating & Cooling": 10.4,
+                    "Total": 47.95
+                },
+                {
+                    "Duration": "5 day per week",
+                    "Transportation": 5.1,
+                    "Office Electrical Equipment": 0,
+                    "Home Electrical Equipment": 11,
+                    "Office Lighting": 0,
+                    "Home Lighting": 0.91,
+                    "Office Heating & Cooling": 0,
+                    "Home Heating & Cooling": 17.5,
+                    "Total": 34.51
+                }
+            ];
+
+            var margin = {top: 20, right: 20, bottom: 30, left: 40},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+            // var svg = d3.select('body')
+            var svg = d3.select('#energy-use')
+                        .append('svg')
+                        .attr('width', width + margin.left + margin.right)
+                        .attr('height', height + margin.top + margin.bottom);
+            
+            var g = svg.append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleBand()
+                .domain(data.map(function (d) { return d["Duration"]; }))
+                .rangeRound([0, width])
+                .paddingInner(0.05)
+                .align(0.1);
+
+            var y = d3.scaleLinear()
+                .domain([0, d3.max(data, function(d) { return d["Total"]; })]).nice()
+                .rangeRound([height, 0]);
+
+            var keys = ['Transportation', 'Office Electrical Equipment', 'Home Electrical Equipment',   'Office Lighting',  'Home Lighting',   'Office Heating & Cooling',  'Home Heating & Cooling'];
+
+            var colors = ['#f38156', 
+            '#143c3e', 
+            '#000080',
+            '#3cb44b',
+            // '#21662a', 
+            '#0077b7', 
+            '#c9ffd0',
+            '#74c9f7']
+                        // '#3cb44b',
+
+
+
+            var z = d3.scaleOrdinal()
+                .domain(keys)
+                .range(colors);
+
+            g.append("g")
+                .selectAll("g")
+                .data(d3.stack().keys(keys)(data))
+                .enter().append("g")
+                  .attr("fill", function(d) { return z(d.key); })
+                .selectAll("rect")
+                .data(function(d) { return d; })
+                .enter().append("rect")
+                  .attr("x", function(d) { return x(d.data["Duration"]); })
+                  .attr("y", function(d) { return y(d[1]); })
+                  .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                  .attr("width", x.bandwidth())
+                .on("mouseover", function() { tooltip.style("display", null); })
+                .on("mouseout", function() { tooltip.style("display", "none"); })
+                .on("mousemove", function(d) {
+                  // console.log(d);
+                  var xPosition = d3.mouse(this)[0] - 5;
+                  var yPosition = d3.mouse(this)[1] - 5;
+                  tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                  tooltip.select("text").text((d[1]-d[0]).toFixed(1));
+                });
+
+            g.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x));
+
+            g.append("g")
+              .attr("class", "axis")
+              .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+              .attr("x", 2)
+              .attr("y", y(y.ticks().pop()) + 0.5)
+              .attr("dy", "0.32em")
+              .attr("fill", "#000")
+              .attr("font-weight", "bold")
+              .attr("text-anchor", "start")
+              .text("CO2 Emissions (kg/7 day work week)");            
+
+            var legend = g.append("g")
+                  .attr("font-family", "sans-serif")
+                  .attr("font-size", 10)
+                  .attr("text-anchor", "end")
+                .selectAll("g")
+                .data(keys.slice().reverse())
+                .enter().append("g")
+                  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                  .attr("x", width - 19)
+                  .attr("width", 19)
+                  .attr("height", 19)
+                  .attr("fill", z);
+
+            legend.append("text")
+                  .attr("x", width - 24)
+                  .attr("y", 9.5)
+                  .attr("dy", "0.32em")
+                  .text(function(d) { return d; });
+
+            var tooltip = svg.append("g")
+                .attr("class", "tooltip")
+                .style("display", "none");
+            
+            tooltip.append("rect")
+                .attr("width", 60)
+                .attr("height", 20)
+                .attr("fill", "white")
+                .style("opacity", 0.5);
+
+            tooltip.append("text")
+                .attr("x", 30)
+                .attr("dy", "1.2em")
+                .style("text-anchor", "middle")
+                .attr("font-size", "12px")
+                .attr("font-weight", "bold");
+        </script>
+
+
+        <!-- TELEWORK OVER TIME -->
+        <script>
+            var data = [
+                {
+                    "Industry": "Total",
+                    "Year": 2006,
+                    "Percent": 21.1
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2006,
+                    "Percent": 32.3
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2006,
+                    "Percent": 33.2
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2006,
+                    "Percent": 12.1
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2006,
+                    "Percent": 20.3
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2006,
+                    "Percent": 8.2
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2006,
+                    "Percent": 14.5
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2006,
+                    "Percent": 10.9
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2006,
+                    "Percent": 3.8
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2006,
+                    "Percent": 6.1
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2007,
+                    "Percent": 19.9
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2007,
+                    "Percent": 32.3
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2007,
+                    "Percent": 30.6
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2007,
+                    "Percent": 11.3
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2007,
+                    "Percent": 20.7
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2007,
+                    "Percent": 7.8
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2007,
+                    "Percent": 10.6
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2007,
+                    "Percent": 7.3
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2007,
+                    "Percent": 4
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2007,
+                    "Percent": 6
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2008,
+                    "Percent": 21.1
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2008,
+                    "Percent": 29.8
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2008,
+                    "Percent": 32.1
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2008,
+                    "Percent": 13
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2008,
+                    "Percent": 24.3
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2008,
+                    "Percent": 12.3
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2008,
+                    "Percent": 5.5
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2008,
+                    "Percent": 9.2
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2008,
+                    "Percent": 5.5
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2008,
+                    "Percent": 7.3
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2009,
+                    "Percent": 23.6
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2009,
+                    "Percent": 35.5
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2009,
+                    "Percent": 38.3
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2009,
+                    "Percent": 13.7
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2009,
+                    "Percent": 21.7
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2009,
+                    "Percent": 9
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2009,
+                    "Percent": 11.4
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2009,
+                    "Percent": 12
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2009,
+                    "Percent": 5.2
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2009,
+                    "Percent": 6.6
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2010,
+                    "Percent": 23.6
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2010,
+                    "Percent": 32.9
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2010,
+                    "Percent": 32.9
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2010,
+                    "Percent": 15
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2010,
+                    "Percent": 26.6
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2010,
+                    "Percent": 10.6
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2010,
+                    "Percent": 11.6
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2010,
+                    "Percent": 12.7
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2010,
+                    "Percent": 6.3
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2010,
+                    "Percent": 10.3
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2011,
+                    "Percent": 21.3
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2011,
+                    "Percent": 34.2
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2011,
+                    "Percent": 33.5
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2011,
+                    "Percent": 9.5
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2011,
+                    "Percent": 20
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2011,
+                    "Percent": 12.8
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2011,
+                    "Percent": 10.1
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2011,
+                    "Percent": 11.3
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2011,
+                    "Percent": 5.2
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2011,
+                    "Percent": 5.2
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2012,
+                    "Percent": 23.2
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2012,
+                    "Percent": 35.5
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2012,
+                    "Percent": 37
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2012,
+                    "Percent": 10.1
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2012,
+                    "Percent": 21.4
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2012,
+                    "Percent": 9.3
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2012,
+                    "Percent": 16
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2012,
+                    "Percent": 14.7
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2012,
+                    "Percent": 6.2
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2012,
+                    "Percent": 7.2
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2013,
+                    "Percent": 22.9
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2013,
+                    "Percent": 35.1
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2013,
+                    "Percent": 34.8
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2013,
+                    "Percent": 11
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2013,
+                    "Percent": 21.4
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2013,
+                    "Percent": 11.1
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2013,
+                    "Percent": 17
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2013,
+                    "Percent": 14.8
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2013,
+                    "Percent": 7.9
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2013,
+                    "Percent": 6.2
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2014,
+                    "Percent": 23.1
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2014,
+                    "Percent": 36.8
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2014,
+                    "Percent": 34
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2014,
+                    "Percent": 12
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2014,
+                    "Percent": 26
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2014,
+                    "Percent": 8.5
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2014,
+                    "Percent": 15
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2014,
+                    "Percent": 9.5
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2014,
+                    "Percent": 4.6
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2014,
+                    "Percent": 6.3
+                },
+                {
+                    "Industry": "Total",
+                    "Year": 2015,
+                    "Percent": 24.1
+                },
+                {
+                    "Industry": "Management, business, and financial operations occupations",
+                    "Year": 2015,
+                    "Percent": 37.8
+                },
+                {
+                    "Industry": "Professional and related occupations",
+                    "Year": 2015,
+                    "Percent": 34.6
+                },
+                {
+                    "Industry": "Service occupations",
+                    "Year": 2015,
+                    "Percent": 10.5
+                },
+                {
+                    "Industry": "Sales and related occupations",
+                    "Year": 2015,
+                    "Percent": 22.1
+                },
+                {
+                    "Industry": "Office and administrative support occupations",
+                    "Year": 2015,
+                    "Percent": 11.2
+                },
+                {
+                    "Industry": "Construction and extraction occupations",
+                    "Year": 2015,
+                    "Percent": 16.2
+                },
+                {
+                    "Industry": "Installation, maintenance, and repair occupations",
+                    "Year": 2015,
+                    "Percent": 9.6
+                },
+                {
+                    "Industry": "Production occupations",
+                    "Year": 2015,
+                    "Percent": 5.5
+                },
+                {
+                    "Industry": "Transportation and material moving occupations",
+                    "Year": 2015,
+                    "Percent": 7.7
+                }
+            ];
+
+            var margin = {top: 20, right: 20, bottom: 30, left: 40},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+            // var svg_paths = d3.select('body')
+            var svg_paths = d3.select('#telework-industry')
+                        .append('svg')
+                        .attr('width', width + margin.left + margin.right)
+                        .attr('height', height + margin.top + margin.bottom);
+
+            var g_paths = svg_paths.append("g")
+                        .attr("transform", 
+                                "translate(" + margin.left + "," + margin.top + ")");
+
+            // var legend = d3.select('body')
+            var legend = d3.select('#telework-industry')
+                                .append('svg')
+                                .attr('width', 400)
+                                .attr('height', 270)
+                                .attr("transform", "translate(" + margin.left + ",10)");
+
+            var x = d3.scaleTime()
+                        .domain(d3.extent(data, function(d) { return d["Year"]; }))
+                        .range([0, width]);
+            
+            var y = d3.scaleLinear()
+                        .domain([0, d3.max(data, function(d) { return d["Percent"]; })])
+                        .range([height, 0]);
+
+            var formatxAxis = d3.format('.0f');
+            var xAxis = d3.axisBottom(x).tickFormat(formatxAxis);
+            var yAxis = d3.axisLeft(y);
+
+            var valueline = d3.line()
+                            .x(function(d) { return x(d["Year"]); })
+                            .y(function(d) { return y(d["Percent"]); });
+
+            var dataNest = d3.nest()
+                .key(function(d) {return d["Industry"];})
+                .entries(data);
+
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+            var color = d3.scaleOrdinal(['#f38156', '#21662a', '#3cb44b', '#4ac9c9', '#008080', '#000080', '#0082c8', '#911eb4', '#e6beff', '#eab2d2']);
+
+
+            function populateGraph(){
+                // Loop through each symbol / key
+                dataNest.forEach(function(d,i) { 
+                    var curr_active = d.active;
+                    g_paths.append("path")
+                        .attr("class", "line")
+                        .style("stroke", function() { // Add the colours dynamically
+                            return d.color = color(d.key); })
+                        // .attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
+                        .attr("id", 'tag'+ d.key.split(/[ ,]+/)[0])
+                        .attr("d", valueline(d.values))
+                        .style("opacity", function() {
+                            if (curr_active) return 1;
+                            else return 0;
+                        });
+
+                    legend.append("text")
+                        .style("fill", "black")
+                        .style("font-size", "14px")
+                        .attr("dy", "1em")
+                        .attr("text-anchor", "start")
+                        // .attr("font-weight", "bold")
+                        .attr("font-weight", function() { 
+                            if (curr_active == true) return "bold";
+                            else return "normal"; })
+                        .attr("transform", "translate(0," + i*(24) + ")")
+                        .text(d.key)
+                        .style("fill", function() { 
+                            return d.color = color(d.key); })
+                        .on("click", function(){
+                            // Determine if current line is visible 
+                            var active   = d.active ? false : true,
+                            // newOpacity = active ? 0 : 1; 
+                            newOpacity = active ? 1 : 0 
+                            // Update whether or not the elements are active
+                            d.active = active; 
+
+                            // Hide or show the elements based on the ID
+                            // d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                            d3.select("#tag" + d.key.split(/[ ,]+/)[0])
+                                .transition().duration(100) 
+                                .style("opacity", newOpacity); 
+                           
+                            if (d.active){
+                                d3.select(this).attr("font-weight", "bold");
+                            } else {
+                                d3.select(this).attr("font-weight", "normal");
+                            }
+
+                        });
+                });
+            }
+
+            function init(){
+                dataNest.forEach(function(d, i){
+                    if (d.key == "Total") d.active = true;
+                    else d.active = false;
+                });
+                populateGraph();
+            }
+            
+            init();
+
+
+            g_paths.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            g_paths.append("g")
+              .attr("class", "axis")
+              .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+              .attr("x", 2)
+              .attr("y", y(y.ticks().pop()) + 0.5)
+              .attr("dy", "0.32em")
+              .attr("fill", "#000")
+              .attr("font-weight", "bold")
+              .attr("text-anchor", "start")
+              .text("Percent Telecommuting"); 
+        </script>
+
+    </body>
+</html>
